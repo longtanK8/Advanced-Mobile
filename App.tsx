@@ -4,6 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Tabs } from './navigation/tabs';
 import { HomeScreen, RestaurantScreen, OrderDeliveryScreen } from './screens';
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
 const Stack = createStackNavigator();
 
