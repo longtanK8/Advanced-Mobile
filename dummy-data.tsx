@@ -4,10 +4,10 @@ import { icons, images } from "./constants";
 import { CategoryData, CurrentLocation, Restaurant } from "./types";
 
 export const initialCurrentLocation: CurrentLocation = {
-  streetName: 'Kuching',
+  streetName: 'Vo Van Kiet St',
   gps: {
-    latitude: 1.5496614931250685,
-    longitude: 110.36381866919922,
+    latitude: 11.035141,
+    longitude: 106.648054,
   },
 };
 
