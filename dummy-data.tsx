@@ -2,12 +2,13 @@
 
 import { icons, images } from "./constants";
 import { CategoryData, CurrentLocation, Restaurant } from "./types";
+import { Longitude, Latitude } from "./location";
 
 export const initialCurrentLocation: CurrentLocation = {
   streetName: 'Vo Van Kiet St',
   gps: {
-    latitude: 11.035141,
-    longitude: 106.648054,
+    latitude: Latitude,
+    longitude: Longitude,
   },
 };
 
