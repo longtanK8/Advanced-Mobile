@@ -1,14 +1,24 @@
 // Dummy Datas
 
 import { icons, images } from "./constants";
-import { CategoryData, CurrentLocation, Restaurant } from "./types";
-import { Longitude, Latitude } from "./location";
+import { CategoryData, CurrentLocation, Restaurant, LocationSet } from "./types";
+import { GetLatitude, GetLongitude } from "./location";
+import { location } from "./constants/icons";
+import { Value } from "react-native-reanimated";
 
 export const initialCurrentLocation: CurrentLocation = {
   streetName: 'Vo Van Kiet St',
   gps: {
-    latitude: Latitude,
-    longitude: Longitude,
+    latitude: 12.0398155,
+    longitude: 106.6412238,
+  },
+};
+
+export const exactLocation: CurrentLocation = {
+  streetName: 'Unknown St',
+  gps: {
+    latitude: Number(GetLatitude()),
+    longitude: Number(GetLongitude()),
   },
 };
 

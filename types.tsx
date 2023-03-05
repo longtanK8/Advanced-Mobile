@@ -13,6 +13,11 @@ export interface ScreenTab {
   screenIcon: keyof typeof icons;
 };
 
+export type LocationSet = {
+  longitude: number,
+  latitude: number
+}
+
 export type CurrentLocation = {streetName: string; gps: LatLng};
 
 export type CategoryData = {id: number; name: string; icon: any};
