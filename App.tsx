@@ -5,7 +5,12 @@ import { useFonts } from 'expo-font';
 import { Tabs } from './navigation/tabs';
 import { HomeScreen, RestaurantScreen, OrderDeliveryScreen } from './screens';
 import { LogBox, View, Text } from "react-native";
-import { getCustomers } from "./DatabaseConnector";
+import LoginForm from './components/common/Login';
+import RegisterForm from './components/common/Register';
+// import { database } from './DatabaseConnector';
+// import { Text } from 'react-native-svg';
+
+// const dataRef = database.ref('path/to/data');
 
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
@@ -22,17 +27,18 @@ export const App = () => {
     return null
   }
   return (
+    // <LoadingComponent/>
     <NavigationContainer>
-      <TestComponent/>
-
-{/*       <Stack.Navigator */}
-{/*         screenOptions={{ headerShown: false }} */}
-{/*         initialRouteName={"Home"} */}
-{/*       > */}
-{/*         <Stack.Screen name="Home" component={Tabs} /> */}
-{/*         <Stack.Screen name="Restaurant" component={RestaurantScreen} /> */}
-{/*         <Stack.Screen name="OrderDelivery" component={OrderDeliveryScreen} /> */}
-{/*       </Stack.Navigator> */}
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName={"Login"}
+      >
+        <Stack.Screen name="Login" component={LoginForm} />
+        <Stack.Screen name="Register" component={RegisterForm} />
+        <Stack.Screen name="Home" component={Tabs} />
+        <Stack.Screen name="Restaurant" component={RestaurantScreen} />
+        <Stack.Screen name="OrderDelivery" component={OrderDeliveryScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
