@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ToastAndroid } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import "react-native-get-random-values";
+import {v4 as uuidv4} from 'uuid';
 import Toast from 'react-native-toast-message';
 
 const RegisterForm = ({ navigation }) => {
@@ -55,6 +57,7 @@ const RegisterForm = ({ navigation }) => {
 
   const handleRegister = () => {
     const user = {
+      "id": uuidv4(),
       "fullName": fullName,
       "userName": userName,
       "email": email,
@@ -64,35 +67,26 @@ const RegisterForm = ({ navigation }) => {
       "yearOfBirth": yearOfBirth
     };
     
-    let doesUserExist = true;
+    let doesUserExist = false;
     if(userList){
-      userList.forEach(u => {
-        if(u.userName == userName){
-          Toast.show({
-            type: 'Error',
-            text1: 'Oppsss!',
-            text2: 'User name already exists!',
-          });
-          setIsRegisterable(false);
-        }else if(u.email == email){
-          Toast.show({
-            type: 'Error',
-            text1: 'Oppsss!',
-            text2: 'This email is registered!',
-          });
-          setIsRegisterable(false);
-        }else if(u.phoneNumber == phoneNumber){
-          Toast.show({
-            type: 'Error',
-            text1: 'Oppsss!',
-            text2: 'This phone number is registered!',
-          });
-          setIsRegisterable(false);
+      
+      userList.every(u => {
+        if(u.userName == user.userName){
+          ToastAndroid.showWithGravity("User name already exists!", ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+          doesUserExist = true;
+        }else if(u.email == user.email){
+          ToastAndroid.showWithGravity("The email is alrealy regiestered!", ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+          doesUserExist = true;
+        }else if(u.phoneNumber == user.phoneNumber){
+          ToastAndroid.showWithGravity("The phone number is alrealy regiestered!", ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+          doesUserExist = true;
         }
+        console.log(JSON.stringify(u) + ' Compared to \n' + JSON.stringify(user) + '>>>> does user exist? ' + doesUserExist);
+        return !doesUserExist;
       })
     }
 
-    if(isRegisterable){
+    if(!doesUserExist){
       fetch('https://delivery-food-379309-default-rtdb.asia-southeast1.firebasedatabase.app/users.json', {
         method: 'POST',
         headers: {
@@ -102,11 +96,7 @@ const RegisterForm = ({ navigation }) => {
         body: JSON.stringify(user),
       });
     
-      Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2: 'Account Create Successfully!',
-      });
+      ToastAndroid.showWithGravity("User created successfully!", ToastAndroid.SHORT, ToastAndroid.BOTTOM);
       navigation.navigate("Login");
     }
     

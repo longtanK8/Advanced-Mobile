@@ -1,15 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-
-type User = () =>{
-	fullName: String
-	userName: String
-	password: String
-	email: String
-	phoneNumber: String
-	yearOfBirth: String
-	gender: String
-}
 
 const LoginForm = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -18,9 +8,46 @@ const LoginForm = ({ navigation }) => {
 	const [passwordCorrect, setPasswordCorrect] = useState(true);
 	const [refresh, setRefresh] = useState(false);
 
-	useEffect(() => {
-		setRefresh(!refresh);
-	}, []);
+  const getUserList = () => {
+		// useEffect(() => {
+			// fetch data
+    const dataFetch = async () => {
+      const data = await (
+        await fetch(
+          "https://delivery-food-379309-default-rtdb.asia-southeast1.firebasedatabase.app/users.json"
+        )
+      ).json();
+
+      console.log(parseToArray(data));
+
+      // set state when the data received
+      setUserList(parseToArray(data));
+    };
+
+    const parseToArray = (data:String) => {
+      let dataArray = Object.keys(data).map(function(index){
+          let dataItem = data[index];
+          // do something with person
+          return dataItem;
+      });
+      return dataArray;
+    }
+
+    dataFetch();
+		// }, []);
+	}
+
+	// getUserList();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // Here you can update your data or trigger a refresh
+      getUserList();
+      setPasswordCorrect(true);
+      setRefresh(!refresh);
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const handleLogin = () => {
 		if(userList){
@@ -36,38 +63,8 @@ const LoginForm = ({ navigation }) => {
     
   };
 
-	
 
-	const getUserList = () => {
-		useEffect(() => {
-			// fetch data
-			const dataFetch = async () => {
-				const data = await (
-					await fetch(
-						"https://delivery-food-379309-default-rtdb.asia-southeast1.firebasedatabase.app/users.json"
-					)
-				).json();
-	
-				console.log(parseToArray(data));
-	
-				// set state when the data received
-				setUserList(parseToArray(data));
-			};
-	
-			const parseToArray = (data:String) => {
-				let dataArray = Object.keys(data).map(function(index){
-						let dataItem = data[index];
-						// do something with person
-						return dataItem;
-				});
-				return dataArray;
-			}
-	
-			dataFetch();
-		}, []);
-	}
 
-	getUserList();
 
   return (
     <View style={styles.container}>
