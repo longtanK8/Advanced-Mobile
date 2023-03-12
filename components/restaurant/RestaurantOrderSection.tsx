@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { COLORS, FONTS, icons, SIZES } from '../../constants';
+import { setOrder } from '../../DatabaseConnector';
+import {v4 as uuidv4} from 'uuid';
+import AppContext from '../../AppContext';
+
 
 type RestaurantOrderSectionProps = {
   basketCount: number;
+  restaurantName: string,
   total: number;
   placeOrder: () => void;
 };
@@ -12,8 +17,26 @@ type RestaurantOrderSectionProps = {
 export const RestaurantOrderSection = ({
   basketCount,
   total,
+  restaurantName,
   placeOrder,
 }: RestaurantOrderSectionProps) => {
+  const { globalVariable, setGlobalVariable } = useContext(AppContext);
+
+  const createOrder = () => {
+    console.log(restaurantName, total, basketCount);
+    let order = {
+      id: uuidv4(),
+      userName: globalVariable.user.fullName,
+      userId: globalVariable.user.id,
+      orderDate: (new Date()).toLocaleDateString(),
+      totalPrice: total,
+      totalItems: basketCount,
+      restaurantName: restaurantName
+    }
+    console.log(JSON.stringify(order));
+    setOrder(order);
+  }
+
   return total > 0 ? (
     <View style={styles.container}>
       <View style={styles.amountDetailsContainer}>
@@ -31,7 +54,7 @@ export const RestaurantOrderSection = ({
             resizeMode="contain"
             style={styles.image}
           />
-          <Text style={styles.text}>8888</Text>
+          <Text style={styles.text}>Exact Location</Text>
         </View>
       </View>
 
@@ -43,7 +66,7 @@ export const RestaurantOrderSection = ({
             ...total <= 0 ? styles.disabledOrderButton : { }
           }}
           disabled={total <= 0}
-          onPress={() => placeOrder()}>
+          onPress={() => {createOrder(), placeOrder()}}>
           <Text style={styles.orderButtonText}>Order</Text>
         </TouchableOpacity>
       </View>

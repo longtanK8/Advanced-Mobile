@@ -7,6 +7,7 @@ import { ScreenTab } from '../types';
 import { TabBarCustomButtonActive } from '../components/tabs/TabBarCustomButtonActive';
 import { TabBarCustomButton } from '../components/tabs/TabBarCustomButton';
 import { CustomTabBar } from '../components/tabs/CustomTabBar';
+import { ProfileScreen } from '../screens/Profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +29,7 @@ const screens: ScreenTab[] = [
   },
   {
     screenName: 'User',
-    screenComponent: HomeScreen,
+    screenComponent: ProfileScreen,
     screenIcon: 'user',
   },
 ];

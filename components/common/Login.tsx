@@ -1,12 +1,26 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import AppContext from '../../AppContext';
+import { GetLatitude, GetLongitude } from '../../location';
 
-const LoginForm = ({ navigation }) => {
+const LoginForm = ({ navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 	const [userList, setUserList] = useState();
 	const [passwordCorrect, setPasswordCorrect] = useState(true);
 	const [refresh, setRefresh] = useState(false);
+  const { globalVariable, setGlobalVariable } = useContext(AppContext);
+
+  const [location, setLocation] = useState();
+
+ 
+  const getLocation = async() => {
+    let logitude = await GetLongitude();
+    let latitude = await GetLatitude();
+    setLocation({"longitude": logitude, "latitude": latitude });
+  }
+
+  // getLocation();
 
   const getUserList = () => {
 		// useEffect(() => {
@@ -17,6 +31,7 @@ const LoginForm = ({ navigation }) => {
           "https://delivery-food-379309-default-rtdb.asia-southeast1.firebasedatabase.app/users.json"
         )
       ).json();
+      await getLocation();
 
       console.log(parseToArray(data));
 
@@ -45,6 +60,11 @@ const LoginForm = ({ navigation }) => {
       getUserList();
       setPasswordCorrect(true);
       setRefresh(!refresh);
+      // if(globalVariable){
+      //   if(!globalVariable.location){
+      //     getLocation();
+      //   }
+      // }
     });
     return unsubscribe;
   }, [navigation]);
@@ -52,7 +72,13 @@ const LoginForm = ({ navigation }) => {
   const handleLogin = () => {
 		if(userList){
 			userList.forEach(user => {
-				if((user.userName == email || user.email == email) && user.password == password){
+				if((user.userName.toLowerCase() == email.toLowerCase() || user.email.toLowerCase() == email.toLowerCase()) && user.password == password){
+          setGlobalVariable({
+            ...globalVariable,
+            "user":user,
+            "location": location
+          });
+          console.log(JSON.stringify(location));
 					navigation.navigate('Home');
 				}else{
 					setPasswordCorrect(false);

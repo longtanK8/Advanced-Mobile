@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -18,6 +18,7 @@ import {
   GetLatitude, GetLongitude
 } from '../location';
 import { Header } from '../components/common/Header';
+import AppContext from '../AppContext';
 
 type HomeScreenNavigationProp = BottomTabNavigationProp<
   RootTabParamList,
@@ -32,8 +33,9 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const [categories, setCategories] = useState(categoryData);
   const [selectedCategory, setSelectedCategory] = useState<CategoryData | null>(null);
   const [restaurants, setRestaurants] = useState(restaurantsWithCategories);
-  const [currentLocation, setCurrentLocation] = useState(initialCurrentLocation);
+  const [currentLocation, setCurrentLocation] = useState(exactLocation);
   const [isLoaded, setLoaded] = useState(false);
+  const { globalVariable, setGlobalVariable } = useContext(AppContext);
 
   function onSelectCategory(category: CategoryData) {
     const restaurantList = restaurantsWithCategories.filter((restaurant) =>
@@ -43,42 +45,26 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
     setSelectedCategory(category);
   }
 
-  const getLocation = async (item:Restaurant) => {
-    let latitude:Number = 11.0397485;
-    let longitude:Number = 106.6412255;
-    if(!isLoaded){
-      latitude = await GetLatitude();
-      longitude = await GetLongitude();
-    }
-    const exactLocation: CurrentLocation = {
-      streetName: 'Unknown St',
-      gps: {
-        latitude: Number(latitude),
-        longitude: Number(longitude),
-      },
-    };
-    console.log('exactLocation >>> ', exactLocation);
-    if(longitude !== null && !isLoaded){
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const exactLocation: CurrentLocation = {
+        streetName: 'Unknown St',
+        gps: {
+          latitude: globalVariable.location.latitude,
+          longitude: globalVariable.location.longitude,
+        },
+      };
       setCurrentLocation(exactLocation);
-      setLoaded(true);
-      setTimeout(() => {
-        console.log(currentLocation);
-        navigation.navigate('Restaurant', {
-          item,
-          currentLocation,
-        })
-      }, 3000);
-      // console.log(currentLocation);
-      // navigation.navigate('Restaurant', {
-      //   item,
-      //   currentLocation,
-      // })
-    }else{
-      navigation.navigate('Restaurant', {
-        item,
-        currentLocation,
-      })
-    }
+    });
+    return unsubscribe;
+  }, [navigation])
+
+  const getLocation = async (item:Restaurant) => {
+    console.log(currentLocation);
+    navigation.navigate('Restaurant', {
+      item,
+      currentLocation,
+    })
   }
 
   return (

@@ -213,6 +213,7 @@ const RegisterForm = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 50,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',

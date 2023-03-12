@@ -145,6 +145,7 @@ export const RestaurantFoodInfo = ({
         <RestaurantOrderSection
           basketCount={getBasketItemCount()}
           total={getTotal()}
+          restaurantName={restaurant?.name || 'unknown'}
           placeOrder={() => placeOrder()}
         />
         {isIphoneX() && <View style={styles.fillEmptySpace}></View>}
