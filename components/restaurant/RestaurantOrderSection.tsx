@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { COLORS, FONTS, icons, SIZES } from '../../constants';
 import { setOrder } from '../../DatabaseConnector';
 import {v4 as uuidv4} from 'uuid';
+import uuid from 'react-native-uuid'
 import AppContext from '../../AppContext';
 
 
@@ -25,7 +26,7 @@ export const RestaurantOrderSection = ({
   const createOrder = () => {
     console.log(restaurantName, total, basketCount);
     let order = {
-      id: uuidv4(),
+      id: uuid.v4(),
       userName: globalVariable.user.fullName,
       userId: globalVariable.user.id,
       orderDate: (new Date()).toLocaleDateString(),

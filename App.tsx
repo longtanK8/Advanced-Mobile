@@ -6,6 +6,7 @@ import { Tabs } from './navigation/tabs';
 import { HomeScreen, RestaurantScreen, OrderDeliveryScreen } from './screens';
 import { LogBox, View, Text } from "react-native";
 import LoginForm from './components/common/Login';
+import "react-native-get-random-values";
 import RegisterForm from './components/common/Register';
 import AppContext from './AppContext';
 

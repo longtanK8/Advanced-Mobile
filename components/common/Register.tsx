@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ToastAndroid } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import "react-native-get-random-values";
 import {v4 as uuidv4} from 'uuid';
+import uuid from 'react-native-uuid'
 import Toast from 'react-native-toast-message';
 
 const RegisterForm = ({ navigation }) => {
@@ -57,7 +57,7 @@ const RegisterForm = ({ navigation }) => {
 
   const handleRegister = () => {
     const user = {
-      "id": uuidv4(),
+      "id": uuid.v4(),
       "fullName": fullName,
       "userName": userName,
       "email": email,

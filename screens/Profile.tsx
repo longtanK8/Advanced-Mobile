@@ -126,7 +126,7 @@ export const ProfilePage = () => {
 					</ListItem>
 
 					<ListItem
-						containerStyle={styles.listItemContainer}
+						// containerStyle={styles.listItemContainer}
 						bottomDivider
 						onPress={() => console.log('Order history pressed')}
 					>
@@ -142,7 +142,7 @@ export const ProfilePage = () => {
 					</ListItem>
 				</View>
 				<ScrollView>
-					<View style={styles.section}>
+					<View>
 						{user.orders && user.orders.map((order) => (
 							<ListItem
 								key={order.id}
@@ -210,7 +210,7 @@ const styles = ReactStyle.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FED7CB',
   },
   header: {
     alignItems: 'center',
@@ -228,13 +228,15 @@ const styles = ReactStyle.create({
     fontSize: 16,
   },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FC6D3F',
     marginTop: 20,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
   },
   listItemContainer: {
     height: 'auto',
+		borderBottomColor: '#FED7CB',
+		borderBottomWidth: 10,
     paddingHorizontal: 10,
   },
   listItemTitle: {

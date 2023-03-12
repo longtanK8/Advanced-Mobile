@@ -27,6 +27,12 @@ const sarawak_laksa = require('../assets/images/sarawak-laksa.jpg');
 const sushi = require('../assets/images/sushi.jpg');
 const teh_c_peng = require('../assets/images/teh-c-peng.jpg');
 const tomato_pasta = require('../assets/images/tomato-pasta.jpg');
+const Okinawa_Milk_Tea = require('../assets/images/Okinawa-Milk-Tea.jpg');
+const blueberry_iced_tea = require('../assets/images/blueberry-iced-tea.jpg');
+const chocolate_pudding = require('../assets/images/Chocolate-Pudding.jpg');
+const vietnamese_salad = require('../assets/images/vietnamese-salad.jpg');
+const japanese_salad = require('../assets/images/japanese-salad.jpg');
+const thai_salad = require('../assets/images/thai-salad.jpg');
 
 export default {
   avatar_1,
@@ -60,4 +66,10 @@ export default {
   sushi,
   teh_c_peng,
   tomato_pasta,
+  Okinawa_Milk_Tea,
+  blueberry_iced_tea,
+  chocolate_pudding,
+  thai_salad,
+  japanese_salad,
+  vietnamese_salad,
 };
