@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   StyleSheet,
   TouchableOpacity,
@@ -10,6 +10,10 @@ import { AppStyles } from '../../AppStyles';
 import { COLORS, FONTS, icons, SIZES } from '../../constants';
 import { affordable, expensive, fairPrice } from '../../dummy-data';
 import { CurrentLocation, Restaurant } from '../../types';
+import { TouchableWithoutFeedback, Animated } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import * as solidIcons from '@fortawesome/free-solid-svg-icons';
+import { faHeart } from '@fortawesome/free-regular-svg-icons';
 
 type HomeRestaurantItemProps = {
   item: Restaurant;
@@ -17,6 +21,23 @@ type HomeRestaurantItemProps = {
 };
 
 export const HomeRestaurantItem = ({ item, onPress }: HomeRestaurantItemProps) => {
+  const [liked, setLiked] = useState(false);
+  const [scale, setScale] = useState(new Animated.Value(1));
+  const handlePress = () => {
+    setLiked(!liked);
+    Animated.sequence([
+      Animated.timing(scale, {
+        toValue: 1.5,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scale, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }
   return (
     <TouchableOpacity style={styles.container} onPress={() => onPress(item)}>
       <View style={styles.itemWrapper}>
@@ -31,7 +52,13 @@ export const HomeRestaurantItem = ({ item, onPress }: HomeRestaurantItemProps) =
         </View>
       </View>
       {/* Restaurant name */}
-      <Text style={{...FONTS.body2, fontWeight: '700'}}>{item.name}</Text>
+      <Text style={{...FONTS.body2, fontWeight: '700'}}>{item.name}
+        <TouchableWithoutFeedback onPress={handlePress}>
+          <Animated.View style={{ transform: [{ scale }] }}>
+            <FontAwesomeIcon style={{marginLeft: 5}} icon={liked ? solidIcons.faHeart : faHeart } size={25} color={liked ? 'red' : 'black'}/>
+          </Animated.View>
+        </TouchableWithoutFeedback>
+      </Text>
       {/* Restaurant rating */}
       <View style={styles.itemRatingContainer}>
         {/* Rating */}
@@ -117,5 +144,8 @@ const styles = StyleSheet.create({
     color: COLORS.darkgray,
     textAlignVertical: 'center',
     marginHorizontal: 10,
+  },
+  hearIcon: {
+    flexDirection: 'row',
   },
 });

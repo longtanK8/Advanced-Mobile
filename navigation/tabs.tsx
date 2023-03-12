@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from '../screens';
+import { SearchScreen } from '../screens/Search';
 import { COLORS, icons } from '../constants';
 import { ScreenTab } from '../types';
 import { TabBarCustomButtonActive } from '../components/tabs/TabBarCustomButtonActive';
@@ -19,7 +20,7 @@ const screens: ScreenTab[] = [
   },
   {
     screenName: 'Search',
-    screenComponent: HomeScreen,
+    screenComponent: SearchScreen,
     screenIcon: 'search',
   },
   {

@@ -233,7 +233,7 @@ export const restaurantData: Restaurant[] = [
   {
     id: 5,
     name: 'Cuisine',
-    rating: 4.8,
+    rating: 5.0,
     categories: [1, 2],
     priceRating: affordable,
     photo: images.noodle_shop,
