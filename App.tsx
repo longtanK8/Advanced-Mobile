@@ -9,6 +9,7 @@ import LoginForm from './components/common/Login';
 import "react-native-get-random-values";
 import RegisterForm from './components/common/Register';
 import AppContext from './AppContext';
+import WelcomeScreen from './screens/Welcome';
 
 // import { database } from './DatabaseConnector';
 // import { Text } from 'react-native-svg';
@@ -21,6 +22,7 @@ const Stack = createStackNavigator();
 
 export const App = () => {
   const [globalVariable, setGlobalVariable] = useState(null);
+  const [welcome, setWelcome] = useState(true);
   const [loaded] = useFonts({
     'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
     'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
@@ -31,6 +33,14 @@ export const App = () => {
 
   if(!loaded){
     return null
+  }
+
+  setTimeout(() => {
+    setWelcome(false);
+  }, 4000);
+
+  if(welcome){
+    return <WelcomeScreen/>
   }
   return (
     <AppContext.Provider value={{ globalVariable, setGlobalVariable }}>

@@ -29,7 +29,7 @@ export const RestaurantOrderSection = ({
       id: uuid.v4(),
       userName: globalVariable.user.fullName,
       userId: globalVariable.user.id,
-      orderDate: (new Date()).toLocaleDateString(),
+      orderDate: (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString(),
       totalPrice: total,
       totalItems: basketCount,
       restaurantName: restaurantName
