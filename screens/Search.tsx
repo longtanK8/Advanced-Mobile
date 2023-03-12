@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -23,6 +23,7 @@ import {
   GetLatitude, GetLongitude
 } from '../location';
 import { Header } from '../components/common/Header';
+import AppContext from '../AppContext';
 
 type SearchScreenNavigationProp = BottomTabNavigationProp<
   RootTabParamList,
@@ -44,9 +45,10 @@ type SearchScreenProps = {
 export const SearchScreen = ({ navigation }: SearchScreenProps) => {
   const [categories, setCategories] = useState(categoryData);
   const [selectedCategory, setSelectedCategory] = useState<CategoryData | null>(null);
-  const [restaurants, setRestaurants] = useState(restaurantData);
-  const [currentLocation, setCurrentLocation] = useState(initialCurrentLocation);
+  const [restaurants, setRestaurants] = useState(restaurantsWithCategories);
+  const [currentLocation, setCurrentLocation] = useState(exactLocation);
   const [isLoaded, setLoaded] = useState(false);
+  const { globalVariable, setGlobalVariable } = useContext(AppContext);
   const [search, setSearch] = useState('');
 
   // function onSelectCategory(category: CategoryData) {
@@ -57,39 +59,28 @@ export const SearchScreen = ({ navigation }: SearchScreenProps) => {
   //   setSelectedCategory(category);
   // }
 
-  const getLocation = async (item:Restaurant) => {
-    let latitude:Number = 11.0397485;
-    let longitude:Number = 106.6412255;
-    if(!isLoaded){
-      latitude = await GetLatitude();
-      longitude = await GetLongitude();
-    }
-    const exactLocation: CurrentLocation = {
-      streetName: 'Unknown St',
-      gps: {
-        latitude: Number(latitude),
-        longitude: Number(longitude),
-      },
-    };
-    console.log('exactLocation >>> ', exactLocation);
-    if(longitude !== null && !isLoaded){
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const exactLocation: CurrentLocation = {
+        streetName: 'Unknown St',
+        gps: {
+          latitude: globalVariable.location.latitude,
+          longitude: globalVariable.location.longitude,
+        },
+      };
       setCurrentLocation(exactLocation);
-      setLoaded(true);
-      setTimeout(() => {
-        console.log(currentLocation);
-        navigation.navigate('Restaurant', {
-          item,
-          currentLocation,
-        })
-      }, 3000);
-    }else{
-      navigation.navigate('Restaurant', {
-        item,
-        currentLocation,
-      })
-    }
-  }
+    });
+    return unsubscribe;
+  }, [navigation])
 
+  const getLocation = async (item:Restaurant) => {
+    console.log(currentLocation);
+    navigation.navigate('Restaurant', {
+      item,
+      currentLocation,
+    })
+  }
+  
   const searchFilterFunction = (text) => {
     if (text) {
       const newData = restaurants.filter(function (item) {
