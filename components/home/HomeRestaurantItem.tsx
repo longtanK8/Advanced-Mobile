@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { 
   StyleSheet,
   TouchableOpacity,
@@ -14,6 +14,8 @@ import { TouchableWithoutFeedback, Animated } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import * as solidIcons from '@fortawesome/free-solid-svg-icons';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
+import AppContext from '../../AppContext';
+import { getFavoriteByUserExternalId, updateFavorites } from '../../DatabaseConnector';
 
 type HomeRestaurantItemProps = {
   item: Restaurant;
@@ -22,7 +24,56 @@ type HomeRestaurantItemProps = {
 
 export const HomeRestaurantItem = ({ item, onPress }: HomeRestaurantItemProps) => {
   const [liked, setLiked] = useState(false);
+  const [likeClicked, setLikeClicked] = useState(false);
   const [scale, setScale] = useState(new Animated.Value(1));
+  const { globalVariable, setGlobalVariable } = useContext(AppContext);
+
+  useEffect(() => {
+    if(!likeClicked){
+      const favorites = globalVariable.user.favorites;
+      let isLiked = false;
+      if(favorites){
+        console.log(favorites);
+        favorites.every(function(fav){
+          if(fav.id == item.id){
+            setLiked(true);
+            isLiked = true;
+            return false;
+          }
+          return true;
+        })
+        if(!isLiked){
+          setLiked(false);
+        }
+      }
+    }else{
+      let favorites = globalVariable.user.favorites || [];
+      console.log("hello data >>> ", favorites)
+      console.log("is liked >>> ", liked);
+      if(liked){
+        let containsItem = false;
+        favorites.every(function(fav){
+          if(fav.id == item.id){
+            containsItem = true;
+            return false;
+          }
+          return true;
+        })
+        console.log("contains item >>> ", containsItem);
+        if(!containsItem){
+          favorites.push(item)
+          let user = updateFavorites(favorites, globalVariable.user);
+          setGlobalVariable({"user":user, "location":globalVariable.location});
+        }
+      }else{
+        favorites = favorites.filter(fav => fav.id != item.id);
+        let user = updateFavorites(favorites, globalVariable.user);
+        setGlobalVariable({"user":user, "location":globalVariable.location});
+      }
+      setLikeClicked(false);
+    }
+  }, [liked])
+
   const handlePress = () => {
     setLiked(!liked);
     Animated.sequence([
@@ -37,7 +88,9 @@ export const HomeRestaurantItem = ({ item, onPress }: HomeRestaurantItemProps) =
         useNativeDriver: true,
       }),
     ]).start();
+    setLikeClicked(true);
   }
+
   return (
     <TouchableOpacity style={styles.container} onPress={() => onPress(item)}>
       <View style={styles.itemWrapper}>

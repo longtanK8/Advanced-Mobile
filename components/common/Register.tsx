@@ -65,7 +65,8 @@ const RegisterForm = ({ navigation }) => {
       "password": password,
       "phoneNumber": phoneNumber,
       "gender": gender,
-      "yearOfBirth": yearOfBirth
+      "yearOfBirth": yearOfBirth,
+      "favorites": [],
     };
     
     let doesUserExist = false;

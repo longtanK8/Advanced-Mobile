@@ -1,10 +1,11 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   Text,
   View,
   TextInput,
+  Image,
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { HomeMainCategories } from '../components/home/HomeMainCategories';
@@ -23,6 +24,7 @@ import {
   GetLatitude, GetLongitude
 } from '../location';
 import { Header } from '../components/common/Header';
+import AppContext from '../AppContext';
 
 type FavouriteScreenNavigationProp = BottomTabNavigationProp<
   RootTabParamList,
@@ -45,7 +47,9 @@ export const FavouriteScreen = ({ navigation }: FavouriteScreenProps) => {
   const [categories, setCategories] = useState(categoryData);
   const [selectedCategory, setSelectedCategory] = useState<CategoryData | null>(null);
   const [restaurants, setRestaurants] = useState(restaurantData);
+  const [likedRestaurants, setLikedRestaurants] = useState([]);
   const [currentLocation, setCurrentLocation] = useState(initialCurrentLocation);
+  const { globalVariable, setGlobalVariable } = useContext(AppContext);
   const [isLoaded, setLoaded] = useState(false);
   const [like, setLike] = useState('');
 
@@ -57,37 +61,36 @@ export const FavouriteScreen = ({ navigation }: FavouriteScreenProps) => {
   //   setSelectedCategory(category);
   // }
 
-  const getLocation = async (item:Restaurant) => {
-    let latitude:Number = 11.0397485;
-    let longitude:Number = 106.6412255;
-    if(!isLoaded){
-      latitude = await GetLatitude();
-      longitude = await GetLongitude();
-    }
-    const exactLocation: CurrentLocation = {
-      streetName: 'Unknown St',
-      gps: {
-        latitude: Number(latitude),
-        longitude: Number(longitude),
-      },
-    };
-    console.log('exactLocation >>> ', exactLocation);
-    if(longitude !== null && !isLoaded){
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const favorites = globalVariable.user.favorites;
+      const exactLocation: CurrentLocation = {
+        streetName: 'Unknown St',
+        gps: {
+          latitude: globalVariable.location.latitude,
+          longitude: globalVariable.location.longitude,
+        },
+      };
       setCurrentLocation(exactLocation);
-      setLoaded(true);
-      setTimeout(() => {
-        console.log(currentLocation);
-        navigation.navigate('Restaurant', {
-          item,
-          currentLocation,
-        })
-      }, 3000);
-    }else{
-      navigation.navigate('Restaurant', {
-        item,
-        currentLocation,
-      })
-    }
+      if(favorites){
+        let returnData:Restaurant[] = [];
+        favorites.forEach( fav => {
+          restaurants.filter(res => res.id == fav.id).forEach(e => {
+            returnData.push(e);
+          });
+        });
+        setLikedRestaurants(returnData);
+      }
+    });
+    return unsubscribe;
+  }, [navigation])
+
+  const getLocation = async (item:Restaurant) => {
+    console.log(currentLocation);
+    navigation.navigate('Restaurant', {
+      item,
+      currentLocation,
+    })
   }
 
   return (
@@ -97,12 +100,26 @@ export const FavouriteScreen = ({ navigation }: FavouriteScreenProps) => {
         rightIcon={icons.basket}
         headerText={currentLocation.streetName}
       />
-      <HomeRestaurantsList
-        restaurants={restaurants}
-        onPress={(item) =>
-          getLocation(item)
-        }
-      />
+      {likedRestaurants && (
+        <HomeRestaurantsList
+          restaurants={likedRestaurants}
+          onPress={(item) =>
+            getLocation(item)
+          }
+        />
+      )}
+      {likedRestaurants.length == 0 &&
+        (
+          <View style={{height: "100%", backgroundColor: "#FFF9E1"}}>
+            <Image
+              source={require('../assets/images/paradise-logo.png')}
+              style={styles.logo}
+            />
+            <Text style={{color: "#333", fontWeight: "bold", marginTop: 100, textAlign: "center", fontSize: 20}}>Opppsss... No Favorite Restaurants</Text>
+          </View>
+        )
+      }
+      
     </SafeAreaView>
   );
   
@@ -125,5 +142,12 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
+  },
+  logo: {
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: 250,
+    height: 250,
+    marginBottom: 20,
   },
 });

@@ -36,6 +36,7 @@ export const RestaurantOrderSection = ({
     }
     console.log(JSON.stringify(order));
     setOrder(order);
+    placeOrder();
   }
 
   return total > 0 ? (
@@ -67,7 +68,7 @@ export const RestaurantOrderSection = ({
             ...total <= 0 ? styles.disabledOrderButton : { }
           }}
           disabled={total <= 0}
-          onPress={() => {createOrder(), placeOrder()}}>
+          onPress={() => {createOrder()}}>
           <Text style={styles.orderButtonText}>Order</Text>
         </TouchableOpacity>
       </View>
