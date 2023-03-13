@@ -17,9 +17,9 @@ export const Header = ({ leftIcon, rightIcon, headerText, leftPress }: HeaderPro
         onPress={() => !!leftPress && leftPress()}
       >
         <Image
-          source={leftIcon}
+          source={require('../../assets/images/paradise-logo.png')}
           resizeMode="contain"
-          style={styles.headerImage}
+          style={{width:50}}
         />
       </TouchableOpacity>
 
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   headerLocationTextWrapper: {
     width: '70%',
     height: '100%',
-    backgroundColor: COLORS.lightGray3,
+    backgroundColor: "#FFFFFF",
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: SIZES.radius,

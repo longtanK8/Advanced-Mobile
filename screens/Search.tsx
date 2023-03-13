@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: COLORS.lightGray4,
+    backgroundColor: "#FFF9E1",
   },
   textInputStyle: {
     height: 40,

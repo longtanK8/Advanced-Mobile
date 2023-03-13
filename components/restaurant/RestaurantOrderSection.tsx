@@ -6,25 +6,28 @@ import { setOrder } from '../../DatabaseConnector';
 import {v4 as uuidv4} from 'uuid';
 import uuid from 'react-native-uuid'
 import AppContext from '../../AppContext';
+import { OrderItem, Restaurant } from '../../types';
 
 
 type RestaurantOrderSectionProps = {
   basketCount: number;
-  restaurantName: string,
+  restaurant: Restaurant,
   total: number;
+  orderItems: OrderItem[];
   placeOrder: () => void;
 };
 
 export const RestaurantOrderSection = ({
   basketCount,
+  restaurant,
   total,
-  restaurantName,
+  orderItems,
   placeOrder,
 }: RestaurantOrderSectionProps) => {
   const { globalVariable, setGlobalVariable } = useContext(AppContext);
 
   const createOrder = () => {
-    console.log(restaurantName, total, basketCount);
+    console.log(restaurant.name, total, basketCount);
     let order = {
       id: uuid.v4(),
       userName: globalVariable.user.fullName,
@@ -32,7 +35,9 @@ export const RestaurantOrderSection = ({
       orderDate: (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString(),
       totalPrice: total,
       totalItems: basketCount,
-      restaurantName: restaurantName
+      restaurant: restaurant,
+      restaurantName: restaurant.name,
+      orderItems: orderItems,
     }
     console.log(JSON.stringify(order));
     setOrder(order);

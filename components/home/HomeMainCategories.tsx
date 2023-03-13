@@ -28,8 +28,7 @@ export const HomeMainCategories = ({ categories, selectedCategory, onSelectCateg
 
   return (
     <View style={styles.container}>
-      <Text style={{...FONTS.h1}}>Main</Text>
-      <Text style={{...FONTS.h1}}>Categories</Text>
+      <Text style={{...FONTS.h1, textAlign:"center"}}>Main Categories</Text>
 
       <FlatList
         data={categories}
