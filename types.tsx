@@ -4,6 +4,7 @@ import { icons } from './constants';
 export type RootTabParamList = {
   Home: undefined;
   Search: undefined;
+  Favourite: undefined;
   Restaurant: { item: Restaurant, currentLocation: CurrentLocation };
   OrderDelivery: { restaurant: Restaurant | null, currentLocation: CurrentLocation | null };
 };

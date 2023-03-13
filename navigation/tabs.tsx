@@ -3,6 +3,7 @@ import { Image, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from '../screens';
 import { SearchScreen } from '../screens/Search';
+import { FavouriteScreen } from '../screens/Favourite';
 import { COLORS, icons } from '../constants';
 import { ScreenTab } from '../types';
 import { TabBarCustomButtonActive } from '../components/tabs/TabBarCustomButtonActive';
@@ -25,7 +26,7 @@ const screens: ScreenTab[] = [
   },
   {
     screenName: 'Like',
-    screenComponent: HomeScreen,
+    screenComponent: FavouriteScreen,
     screenIcon: 'like',
   },
   {
