@@ -42,6 +42,7 @@ const LoginForm = ({ navigation}) => {
     const parseToArray = (data:String) => {
       let dataArray = Object.keys(data).map(function(index){
           let dataItem = data[index];
+          dataItem.externalId = index;
           // do something with person
           return dataItem;
       });
