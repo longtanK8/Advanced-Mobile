@@ -10,6 +10,7 @@ import "react-native-get-random-values";
 import RegisterForm from './components/common/Register';
 import AppContext from './AppContext';
 import WelcomeScreen from './screens/Welcome';
+import OrderPage from './screens/OrderHistory';
 
 // import { database } from './DatabaseConnector';
 // import { Text } from 'react-native-svg';
@@ -54,6 +55,7 @@ export const App = () => {
           <Stack.Screen name="Home" component={Tabs} />
           <Stack.Screen name="Restaurant" component={RestaurantScreen} />
           <Stack.Screen name="OrderDelivery" component={OrderDeliveryScreen} />
+          <Stack.Screen name="OrderHistory" component={OrderPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </AppContext.Provider>
