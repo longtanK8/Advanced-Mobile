@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Image, StyleSheet as ReactStyle, RefreshControl } from 'react-native';
 import { Avatar, ListItem, Text } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 import {
     SafeAreaView,
     StyleSheet,
@@ -68,6 +69,7 @@ export const ProfilePage = () => {
     orders: orders
   };
 
+	const customNavigation = useNavigation();
   return (
 		<ScrollView contentContainerStyle={styles.scrollView}
 		refreshControl={
@@ -128,7 +130,7 @@ export const ProfilePage = () => {
 					<ListItem
 						// containerStyle={styles.listItemContainer}
 						bottomDivider
-						onPress={() => console.log('Order history pressed')}
+						onPress={() => {customNavigation.navigate("OrderHistory")}}
 					>
 						<ListItem.Content>
 							<ListItem.Title style={styles.listItemTitle}>
@@ -181,7 +183,8 @@ export const ProfilePage = () => {
 								</ListItem.Content>
 								<ListItem.Chevron color="#bbb" />
 							</ListItem>
-						)) || (
+						))}
+						{(!user.orders || user.orders.length == 0) && (
 							<Text style={{fontSize: 20, textAlign: 'center', marginTop: 20}}>No orders to show</Text>
 						)}
 					</View>
@@ -216,7 +219,7 @@ const styles = ReactStyle.create({
     alignItems: 'center',
     paddingTop: 40,
     paddingBottom: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFF9E1',
   },
   name: {
     fontSize: 24,

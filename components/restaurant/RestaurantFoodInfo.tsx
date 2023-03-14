@@ -212,6 +212,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 34,
-    backgroundColor: COLORS.white,
+    backgroundColor: "#FFF9E1",
   },
 });

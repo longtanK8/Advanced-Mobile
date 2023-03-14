@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {COLORS, FONTS, icons, SIZES} from '../../constants';
 
 type HeaderProps = {
@@ -9,36 +10,39 @@ type HeaderProps = {
   leftPress?: Function;
 };
 
-export const Header = ({ leftIcon, rightIcon, headerText, leftPress }: HeaderProps) => (
-  <>
-    <View style={styles.headerContainer}>
-      <TouchableOpacity 
-        style={styles.headerImageContainer}
-        onPress={() => !!leftPress && leftPress()}
-      >
-        <Image
-          source={require('../../assets/images/paradise-logo.png')}
-          resizeMode="contain"
-          style={{width:50}}
-        />
-      </TouchableOpacity>
+export const Header = ({ leftIcon, rightIcon, headerText, leftPress }: HeaderProps) => {
+  const navigation = useNavigation();
+  return (
+    <>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity 
+          style={styles.headerImageContainer}
+          onPress={() => !!leftPress && leftPress()}
+        >
+          <Image
+            source={require('../../assets/images/paradise-logo.png')}
+            resizeMode="contain"
+            style={{width:50}}
+          />
+        </TouchableOpacity>
 
-      <View style={styles.headerLocationContainer}>
-        <View style={styles.headerLocationTextWrapper}>
-          <Text style={{...FONTS.h3}}>{headerText}</Text>
+        <View style={styles.headerLocationContainer}>
+          <View style={styles.headerLocationTextWrapper}>
+            <Text style={{...FONTS.h3}}>{headerText}</Text>
+          </View>
         </View>
-      </View>
 
-      <TouchableOpacity style={styles.headerRightImageContainer}>
-        <Image
-          source={rightIcon}
-          resizeMode="contain"
-          style={styles.headerImage}
-        />
-      </TouchableOpacity>
-    </View>
-  </>
-);
+        <TouchableOpacity style={styles.headerRightImageContainer} onPress={() => {navigation.navigate("OrderHistory")}}>
+          <Image
+            source={rightIcon}
+            resizeMode="contain"
+            style={styles.headerImage}
+          />
+        </TouchableOpacity>
+      </View>
+    </>
+  )
+};
 
 const styles = StyleSheet.create({
   headerContainer: {

@@ -38,7 +38,7 @@ export const OrderDeliveryInfo = ({ restaurant, onCall, onMessage }: OrderDelive
           style={{...styles.button, ...styles.messageButton}}
           onPress={() => onMessage()} 
         >
-          <Text style={styles.buttonText}>Message</Text>
+          <Text style={styles.buttonText}>Home</Text>
         </TouchableOpacity>
       </View>
     </View>

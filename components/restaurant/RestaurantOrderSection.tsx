@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, ToastAndroid } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { COLORS, FONTS, icons, SIZES } from '../../constants';
 import { setOrder } from '../../DatabaseConnector';
@@ -27,21 +27,27 @@ export const RestaurantOrderSection = ({
   const { globalVariable, setGlobalVariable } = useContext(AppContext);
 
   const createOrder = () => {
-    console.log(restaurant.name, total, basketCount);
-    let order = {
-      id: uuid.v4(),
-      userName: globalVariable.user.fullName,
-      userId: globalVariable.user.id,
-      orderDate: (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString(),
-      totalPrice: total,
-      totalItems: basketCount,
-      restaurant: restaurant,
-      restaurantName: restaurant.name,
-      orderItems: orderItems,
+    try{
+      console.log(restaurant.name, total, basketCount);
+      let order = {
+        id: uuid.v4(),
+        userName: globalVariable.user.fullName,
+        userId: globalVariable.user.id,
+        orderDate: (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString(),
+        totalPrice: total,
+        totalItems: basketCount,
+        restaurant: restaurant,
+        restaurantName: restaurant.name,
+        orderItems: orderItems,
+      }
+      console.log(JSON.stringify(order));
+      setTimeout(() => {
+        placeOrder();
+      }, 1000);
+      setOrder(order);
+    }catch(e){
+      ToastAndroid.showWithGravity("Unknown Error Occurred, You are redirecting to home...", ToastAndroid.SHORT, ToastAndroid.BOTTOM);
     }
-    console.log(JSON.stringify(order));
-    setOrder(order);
-    placeOrder();
   }
 
   return total > 0 ? (
